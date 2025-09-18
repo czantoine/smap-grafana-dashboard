@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  smap-importer:
+    build:
+      context: ./smap_importer
+      dockerfile: Dockerfile
+    container_name: smap_importer
+    volumes:
+      - smap_db:/app/data
+      - ./smap_importer/scans:/app/scans
+    environment:
+      - DB_PATH=/app/data/smap.db
+    command: ["python", "import_smap.py", "/app/scans/smap-output.json", "/app/data/smap.db"]
+    cap_drop:
+      - ALL
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 128M
+
+  grafana:
+    build:
+      context: .
+      dockerfile: ./grafana-provisioning/Dockerfile
+    container_name: grafana
+    ports:
+      - "3009:3000"
+    volumes:
+      - smap_db:/var/lib/sqlite
+      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ROLE=Admin
+      - GF_INSTALL_PLUGINS=frser-sqlite-datasource
+      - GF_PROVISIONING_DS_SQLITE_NAME=SQLite
+
+volumes:
+  smap_db: {}
