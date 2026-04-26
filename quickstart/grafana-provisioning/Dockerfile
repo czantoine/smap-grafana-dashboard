@@ -11,5 +11,5 @@ COPY ./grafana-provisioning/dashboards/dashboards.yml /etc/grafana/provisioning/
 RUN mkdir -p /var/lib/grafana/dashboards
 
 RUN curl -L -o /var/lib/grafana/dashboards/smap.json \
-    https://grafana.com/api/dashboards/24085/revisions/1/download && \
+    https://grafana.com/api/dashboards/24085/revisions/2/download && \
     sed -i 's/\${DS_SQLITE}/SQLite/g' /var/lib/grafana/dashboards/smap.json
