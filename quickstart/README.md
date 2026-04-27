@@ -27,6 +27,7 @@ For project overview, features, schema details and dashboard panel reference, se
 ```bash
 git clone https://github.com/czantoine/smap-grafana-dashboard
 cd smap-grafana-dashboard/quickstart
+# vi targets.txt          # optional: edit targets
 docker compose up -d
 ```
 
